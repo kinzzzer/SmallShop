@@ -1,24 +1,12 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
+import MainPage from './components/MainPage';
+
 
 function App() {
 
-  const [data, setData] = useState(null)
-
-  useEffect(() => {
-      fetch('/api')
-      .then(response => response.json())
-      .then(response => setData(response.food.id))
-  }, [])
-
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          {
-            !data ? "Loading..." : data
-          }
-        </p>
-      </header>
+      <MainPage/>
     </div>
   );
 }
