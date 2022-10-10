@@ -1,15 +1,17 @@
 import React from 'react'
-import MainPage from './components/MainPage';
-
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import CardDetails from './components/CardDetails';
+import CardList from './components/CardList';
 
 function App() {
-
   return (
-    <div className="App">
-      <h1>Small Shop</h1>
-      <MainPage/>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route exact path={`/card/:id`} element={<CardDetails />} />
+        <Route exact path={``} element={<CardList />} />
+      </Routes>
+    </BrowserRouter>
+
   );
 }
 
