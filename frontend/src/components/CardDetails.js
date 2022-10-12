@@ -9,12 +9,13 @@ import AppTopBar from './ShoppingList';
 import { Box } from '@mui/system';
 import { useNavigate, useParams } from "react-router-dom"
 import getCardById from '../API/getCardById';
-
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 
 export default function CardDetails(props) {
     const [state, setState] = React.useState({});
-    const { name_material, category, price, image } = state;
+    const { nameMaterial, categoryMaterial, price, image, amount } = state;
     const { id } = useParams()
     const navigate = useNavigate();
 
@@ -32,38 +33,61 @@ export default function CardDetails(props) {
 
 
     return (
-        <Box>
+        <Box sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            backgroundColor: '#F7FAFA'
+        }}>
             <Card sx={{
-                maxWidth: 500,
+                maxWidth: 1000,
                 boxShadow: 3,
                 borderRadius: 2,
-                m: 2,
+                m: 2
             }}>
                 <CardMedia
                     component="img"
                     height="640"
+                    maxWidth="650"
                     image={image}
                     alt="Material"
                 />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        {name_material} 
-                        <br/>
-                        Amount: 123
+                <CardContent sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-around',
+
+                }}>
+                    <Typography gutterBottom variant="h5" component="div" sx={{
+                        m: 2
+                    }}>
+                        {nameMaterial}
+                        <br />
+                        Amount: {amount}
                     </Typography>
-                    <Typography gutterBottom variant="h5" component="div">
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Category: {category}
+                    <Typography variant="h5" color="div" sx={{
+                        m: 2
+                    }}>
+                        Category: {categoryMaterial}
                         <br />
                         Price: {price}
                     </Typography>
+                    <Typography gutterBottom variant="h7" component="text.secondary">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    </Typography>
                 </CardContent>
-                <CardActions>
-                    {123 > 0 ? <Button variant="outlined">Buy</Button> : <Button variant="outlined" disabled>Out of stock</Button>}
-                    <button onClick={() => navigate("/card")}>Back to list</button>
+                <CardActions sx={{
+                    justifyContent: 'space-around',
+                }}>
+                    {amount > 0
+                        ?
+                        <Button variant="inhert" startIcon={< AddBoxIcon />}>Add in Shopping List</Button>
+                        :
+                        <Button variant="outlined" disabled>Out of stock</Button>}
+
+                    <Button onClick={() => navigate("/")} variant="inhert" startIcon={<ArrowBackIosNewIcon />}>
+                        Back to list
+                    </Button>
                 </CardActions>
             </Card>
         </Box>

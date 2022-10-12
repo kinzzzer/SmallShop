@@ -4,7 +4,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import {useNavigate, useParams} from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 
 export default function CardListItem(props) {
@@ -12,19 +12,24 @@ export default function CardListItem(props) {
 
     const navigate = useNavigate();
     return (
-        <Card sx={{
-            maxWidth: 500,
+        <Card  sx={{
+            ":hover": {
+                cursor: "pointer",
+                boxShadow: 15,
+            },
+            maxWidth: 300,
             boxShadow: 3,
             borderRadius: 2,
             m: 2,
+            
         }}>
-            <CardMedia
+            <CardMedia onClick={() => navigate(`/card/${id}`)}
                 component="img"
                 height="640"
                 image={image}
                 alt="Material"
             />
-            <CardContent>
+            <CardContent onClick={() => navigate(`/card/${id}`)}>
                 <Typography gutterBottom variant="h5" component="div">
                     {nameMaterial}
                 </Typography>
@@ -36,7 +41,6 @@ export default function CardListItem(props) {
             </CardContent>
             <CardActions>
                 <button >Add in Shopping List</button>
-                <button onClick={()=>navigate(`/card/${id}`)}>Card Info</button>
             </CardActions>
         </Card>
     );

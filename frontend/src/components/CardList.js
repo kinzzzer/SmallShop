@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import CardsInfo from './CardListItem';
+import CardListItem from './CardListItem';
 import getCardList from '../API/getCardList';
-import AppTopBar from './ShoppingList';
 import { Box } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import CardPage from "./CardDetails";
+import { useDispatch } from 'react-redux';
+import MultistepForm from './MultistepForm';
+import { removePurchase } from '../app/slice/cardSlice';
 
 
 function CardList(props) {
 
     const [allCards, setAllCards] = useState([]);
     const [addPurchase, setAddPurchase] = useState([]);
-    const [watchPurchase, setWatchPurchase] = useState(false)
-    const [disableButton, setDisableButton] = useState(false)
+    const [watchPurchase, setWatchPurchase] = useState(false);
+
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
 
     const fetchData = async () => {
         const res = await getCardList()
@@ -24,24 +27,34 @@ function CardList(props) {
         fetchData()
     }, []);
 
+    const handleAddFavorite = (card) => {
+        if (purchase.find((item) => item.id === card.id)) {
+            dispatch(removePurchase(card))
+        } else {
+            dispatch(addPurchase(card))
+        }
+    }
 
-    const list = watchPurchase ? addPurchase : allCards
+    const purchase = ((state) => state.cards.purchase)
+
 
     return (
-        <Box>
-            
-            <Box>
-                {allCards.map((card) => { 
-                    return (
-                        <CardsInfo onClick
-                            nameMaterial={card.name_material}
-                            category={card.category}
-                            price={card.price}
-                            image={card.image}
-                            id={card.id}
-
-                        />)
-                })}
+        <Box sx={{
+            backgroundColor: '#F7FAFA'
+        }}>
+            <Box >
+                <Box>
+                    {allCards.map((card) => {
+                        return (
+                            <CardListItem
+                                nameMaterial={card.nameMaterial}
+                                category={card.categoryMaterial}
+                                price={card.price}
+                                image={card.image}
+                                id={card.id}
+                            />)
+                    })}
+                </Box>
 
             </Box>
         </Box>
