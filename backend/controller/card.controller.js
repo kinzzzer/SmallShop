@@ -8,10 +8,10 @@ class CardInfoController {
         res.json(newCard.rows[0])
 
     }
-    // async getCardInfo(req, res) {
-    //     const cards = await db.query('SELECT * FROM materials')
-    //     res.json(cards.rows)
-    // }
+    async getCardInfo(req, res) {
+        const cards = await db.query('SELECT * FROM materials')
+        res.json(cards.rows)
+    }
     async getOneCardInfo(req, res) {
         const id = req.params.id
         const card = await db.query('SELECT * FROM materials where id = $1', [id])
