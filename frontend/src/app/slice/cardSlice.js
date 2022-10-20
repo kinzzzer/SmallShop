@@ -6,30 +6,29 @@ const initialState = {
     shoppingList: []
 }
 
-export const counterSlice = createSlice({
+export const cardSlice = createSlice({
     name: 'cards',
     initialState,
     reducers: {
-        getCardList: (state, action) => {
-            state.card = [...state.cards, ...action.payload]
+        setCardList: (state, action) => {
+            state.allCards = [...state.allCards, ...action.payload]
         },
-        // getOneCard: (state, action) => {
-        //     state.card = state.cards.filter((item) => {
-        //         return item.id !== action.payload.id
-        //     })
-    },
-    addPurchase: (state, action) => {
-        state.purchase = [...state.purchase, ...action.payload]
-    },
-    removePurchase: (state, action) => {
-        state.purchase = state.purchase.filter((item) => {
-            console.log(item.id, action.payload.id)
-            return item.id !== action.payload.id
-        })
-    },
+        getCurrentCard: (state, action) => {
+            state.currentCard = action.payload
+        },
+        addPurchase: (state, action) => {
+            state.shoppingList = [...state.shoppingList, action.payload]
+        },
+        removePurchase: (state, action) => {
+            state.shoppingList = state.shoppingList.filter((item) => item.id !== action.payload.id)
+        },
+        setSortedCards: (state, action) => {
+            state.allCards = action.payload
+        },
+    }
 })
 
 // Action creators are generated for each case reducer function
-export const { getCardList, addPurchase, removePurchase } = counterSlice.actions
+export const { setCardList, addPurchase, removePurchase, getCurrentCard, setSortedCards } = cardSlice.actions
 
-export default counterSlice.reducer
+export default cardSlice.reducer
