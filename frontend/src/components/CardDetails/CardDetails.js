@@ -7,48 +7,51 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 import { useNavigate, useParams } from "react-router-dom"
-import { useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { removePurchase, addPurchase, setCardList, getCurrentCard } from '../../app/slice/cardSlice';
 import getCardById from '../../API/getCardById';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import SnackbarShoppingList from '../SnackbarShoppinList/SnackbarShoppingList';
+//import SnackbarShoppingList from '../SnackbarShoppinList/SnackbarShoppingList';
 import IconButton from '@mui/material/IconButton';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { removePurchase, addPurchase } from '../../app/slice/cardSlice';
+
+
 
 
 export default function CardDetails(props) {
-    const [state, setState] = React.useState({});
-    const { nameMaterial, categoryMaterial, price, image, amount, materialInfo } = state;
+
+    // const [isOpen, setIsOpen] = React.useState();
+    const currentCard = useSelector((state) => state.cards.currentCard)
+    const shoppingList = useSelector((state) => state.cards.shoppingList)
+    const { nameMaterial, categoryMaterial, price, image, amount, materialInfo } = currentCard;
+
     const { id } = useParams()
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const purchase = useSelector((state) => state.cards.purchase)
-    // const [isOpen, setIsopen] = useState(false);
-    console.log(purchase);
 
+    console.log(currentCard);
+
+    const isInsideCart = shoppingList.find((item) => item.id === currentCard.id)
 
     const cardInfo = async () => {
         const res = await getCardById(id)
-        setState(res.data)
+        dispatch(getCurrentCard(res.data))
+        console.log(res.data);
     }
+
     React.useEffect(() => {
         cardInfo()
     }, []);
-    console.log(state);
 
-    const handleAddFavorite = (card) => {
-        if (purchase.find((item) => item.id === card.id)) {
+    const handleAddPurchase = (card) => {
+        if (isInsideCart) {
             dispatch(removePurchase(card))
         } else {
             dispatch(addPurchase(card))
         }
     }
-    console.log(purchase);
-
-
-
-
+    console.log(currentCard);
 
 
     // function AddInShoppingListButton() {
@@ -68,6 +71,8 @@ export default function CardDetails(props) {
                 maxWidth: 1000,
                 boxShadow: 20,
                 borderRadius: 3,
+                borderBottom: '2px solid #1F5AB5',
+                borderTop: '3px solid #1F5AB5',
                 m: 5,
             }}>
                 <CardMedia
@@ -86,7 +91,7 @@ export default function CardDetails(props) {
                     <Typography gutterBottom variant="h5" component="div" sx={{
                         m: 2
                     }}>
-                        {nameMaterial},
+                        {nameMaterial}
                         <br />
                         {categoryMaterial}
                     </Typography>
@@ -107,7 +112,7 @@ export default function CardDetails(props) {
                 }}>
                     {amount > 0
                         ?
-                        <Button onClick={() => handleAddFavorite} variant="inhert" startIcon={< AddBoxIcon />}>Add in Shopping List</Button>
+                        <Button onClick={() => handleAddPurchase(currentCard)} variant="inhert" startIcon={< AddBoxIcon />}> { isInsideCart ? "Remove": "Add in Shopping List" }</Button>
                         :
                         <Button variant="outlined" disabled>Out of stock</Button>}
 
@@ -115,13 +120,17 @@ export default function CardDetails(props) {
                         Back to list
                     </Button>
 
+
+
                 </CardActions>
+
 
             </Card>
             <Box>
                 <IconButton color="primary" aria-label="add to shopping cart" >
-                    <AddShoppingCartIcon onClick/>
+                    <AddShoppingCartIcon />
                 </IconButton>
+
             </Box>
         </Box>
 

@@ -10,7 +10,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 
 
 export default function CardListItem(props) {
-    const { nameMaterial, category, price, image, id, amount } = props;
+    const { nameMaterial, category, price, image, id} = props;
 
     const navigate = useNavigate();
     return (
@@ -18,29 +18,46 @@ export default function CardListItem(props) {
             ":hover": {
                 cursor: "pointer",
                 boxShadow: 15,
-
+                borderBottom: '3px solid #39818F',
+                color: '9E3F5A'
             },
-            boxShadow: 3,
+            width: '300',
+            textAlign: 'center',
+            borderBottom: '5px solid #F5F5F5',
+            display: 'block',
             borderRadius: 2,
             m: 2,
-            minWidth: '30%',
-            border: '2px solid black'
+            width: '30%',
+
         }}>
             <CardMedia onClick={() => navigate(`/card/${id}`)}
+            sx={{
+                display: 'block',
+                width: '100%',
+            }}
                 component="img"
-                height="640"
+                height="300"
                 image={image}
                 alt={nameMaterial}
             />
-            <CardContent onClick={() => navigate(`/card/${id}`)}>
+            <CardContent onClick={() => navigate(`/card/${id}`)}
+            sx={{
+
+                padding: '15px 0',
+            }}>
                 <Typography gutterBottom variant="h5" component="div"
                     sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
+                        fontSize: '18px',
+                        fontWeight: '400',
+                        color: '#444444',
+                        margin: '0 0 10px 0'
                     }}>
                     {nameMaterial}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text.secondary" 
+                sx={{
+                    
+                }}>
                     Category: {category}
                     <br />
                     Price: {price}

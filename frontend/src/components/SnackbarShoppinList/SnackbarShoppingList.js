@@ -5,18 +5,18 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 export default function SnackbarShoppingList() {
-  const [open, setOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState();
 
-  const handleClick = () => {
-    setOpen(true);
-  };
+  // const handleClick = () => {
+  //   setOpen(true);
+  // };
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setOpen(false);
+    setIsOpen(false);
   };
 
   const action = (
@@ -37,11 +37,11 @@ export default function SnackbarShoppingList() {
 
   return (
     <div>
-      <Button onClick={handleClick}>Open simple snackbar</Button>
+      <Button onClick={setIsOpen}>Open simple snackbar</Button>
       <Snackbar
-        open={open}
+        open={setIsOpen(isOpen)}
         autoHideDuration={6000}
-        onClose={handleClose}
+        onClose={setIsOpen(false)}
         message='Add in shoppin List'
         action={action}
       />
