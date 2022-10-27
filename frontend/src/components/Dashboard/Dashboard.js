@@ -1,14 +1,9 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { useDispatch, useSelector } from 'react-redux';
-
+import { Button, Menu, MenuItem } from '@mui/material';
+import CalendarViewDayIcon from '@mui/icons-material/CalendarViewDay';
 
 export default function Dashboard(props) {
-    const { allCards, lowPrice } = props
-    const dispatch = useDispatch()
-    //const [isSorted, setIsSoreted] = React.useState(false)
+    const { lowPriceFilter, hightPriceFilter, nameFilterAlphabet, nameFilterLength, categoryFilter } = props
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -28,6 +23,8 @@ export default function Dashboard(props) {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
+                color="inherit"
+                startIcon={<CalendarViewDayIcon />}
             >
                 Filters
             </Button>
@@ -46,13 +43,22 @@ export default function Dashboard(props) {
                     horizontal: 'left',
                 }}
             >
-                <MenuItem onClick={() =>{
-                   // setIsSoreted(!isSorted)
-                    lowPrice()
-                } }>Low to high price</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <MenuItem onClick={() => {
+                    lowPriceFilter()
+                }}>From lowest to highest price</MenuItem>
+                <MenuItem onClick={() => {
+                    hightPriceFilter()
+                }}>From highest to lowest price</MenuItem>
+                <MenuItem onClick={() => {
+                    categoryFilter()
+                }}>Category Filter</MenuItem>
+                <MenuItem onClick={() => {
+                    nameFilterAlphabet()
+                }}>Alphabet Filter</MenuItem>
+                <MenuItem onClick={() => {
+                    nameFilterLength()
+                }}>Length Name</MenuItem>
             </Menu>
-        </div>
+        </div >
     );
 }

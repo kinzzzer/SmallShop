@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import CardDetails from './components/CardDetails';
-import CardList from './components/CardList';
+import CardDetails from './components/CardDetails/CardDetails';
+import CardList from './components/CardList/CardList';
 
 function App() {
   return (

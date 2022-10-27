@@ -1,17 +1,11 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { useNavigate, useParams } from "react-router-dom"
-import Button from '@mui/material/Button';
-import AddBoxIcon from '@mui/icons-material/AddBox';
+import { useNavigate } from "react-router-dom"
+import { Card, CardActions, CardContent, CardMedia, Button, Typography } from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 
 export default function CardListItem(props) {
-    const { nameMaterial, category, price, image, id} = props;
-
+    const { nameMaterial, category, price, image, id, handleAddPurchase, isButtonShown } = props;
     const navigate = useNavigate();
     return (
         <Card sx={{
@@ -19,7 +13,7 @@ export default function CardListItem(props) {
                 cursor: "pointer",
                 boxShadow: 15,
                 borderBottom: '3px solid #39818F',
-                color: '9E3F5A'
+                color: '9E3F5A',
             },
             width: '300',
             textAlign: 'center',
@@ -31,20 +25,19 @@ export default function CardListItem(props) {
 
         }}>
             <CardMedia onClick={() => navigate(`/card/${id}`)}
-            sx={{
-                display: 'block',
-                width: '100%',
-            }}
+                sx={{
+                    display: 'block',
+                    width: '100%',
+                }}
                 component="img"
                 height="300"
                 image={image}
                 alt={nameMaterial}
             />
             <CardContent onClick={() => navigate(`/card/${id}`)}
-            sx={{
-
-                padding: '15px 0',
-            }}>
+                sx={{
+                    padding: '15px 0',
+                }}>
                 <Typography gutterBottom variant="h5" component="div"
                     sx={{
                         fontSize: '18px',
@@ -54,10 +47,7 @@ export default function CardListItem(props) {
                     }}>
                     {nameMaterial}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" 
-                sx={{
-                    
-                }}>
+                <Typography variant="body2" color="text.secondary">
                     Category: {category}
                     <br />
                     Price: {price}
@@ -66,6 +56,7 @@ export default function CardListItem(props) {
             <CardActions sx={{
                 justifyContent: 'center'
             }}>
+                {isButtonShown && <Button onClick={() => handleAddPurchase({ id })} color="error" endIcon={<DeleteForeverIcon />} >Delete</Button>}
             </CardActions>
         </Card>
     );

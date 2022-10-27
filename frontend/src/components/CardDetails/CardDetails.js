@@ -1,43 +1,33 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux';
-import { removePurchase, addPurchase, setCardList, getCurrentCard } from '../../app/slice/cardSlice';
+import { removePurchase, addPurchase, getCurrentCard } from '../../app/slice/cardSlice';
+import { Card, CardActions, CardContent, CardMedia, Typography, Button, Snackbar, IconButton } from '@mui/material';
 import getCardById from '../../API/getCardById';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-//import SnackbarShoppingList from '../SnackbarShoppinList/SnackbarShoppingList';
-import IconButton from '@mui/material/IconButton';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import ShoppingListDialog from '../ShoppingListDialog/ShoppingListDialog'
+import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
+import CloseIcon from '@mui/icons-material/Close';
 
 
+export default function CardDetails() {
 
-
-export default function CardDetails(props) {
-
-    // const [isOpen, setIsOpen] = React.useState();
     const currentCard = useSelector((state) => state.cards.currentCard)
     const shoppingList = useSelector((state) => state.cards.shoppingList)
     const { nameMaterial, categoryMaterial, price, image, amount, materialInfo } = currentCard;
+    const [isWindowOpen, setIsWindowOpen] = React.useState(false);
+    const [isInsideCard, setIsInsideCard] = React.useState(false);
 
     const { id } = useParams()
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    console.log(currentCard);
-
-    const isInsideCart = shoppingList.find((item) => item.id === currentCard.id)
-
+    console.log();
     const cardInfo = async () => {
         const res = await getCardById(id)
         dispatch(getCurrentCard(res.data))
-        console.log(res.data);
     }
 
     React.useEffect(() => {
@@ -45,20 +35,40 @@ export default function CardDetails(props) {
     }, []);
 
     const handleAddPurchase = (card) => {
-        if (isInsideCart) {
+        if (shoppingList.find((item) => item.id === card.id)) {
             dispatch(removePurchase(card))
+            setIsInsideCard(false)
         } else {
             dispatch(addPurchase(card))
+            setIsInsideCard(true)
         }
+
     }
-    console.log(currentCard);
 
+    const handleClick = () => {
+        setIsWindowOpen(true);
+    };
 
-    // function AddInShoppingListButton() {
-    //     SnackbarShoppingList();
-    //     addInShoppingList();
-    // }
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
 
+        setIsWindowOpen(false);
+    };
+
+    const action = (
+        <React.Fragment>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleClose}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </React.Fragment>
+    );
 
     return (
         <Box sx={{
@@ -74,11 +84,11 @@ export default function CardDetails(props) {
                 borderBottom: '2px solid #1F5AB5',
                 borderTop: '3px solid #1F5AB5',
                 m: 5,
+
             }}>
                 <CardMedia
                     component="img"
                     height="700"
-                    maxWidth="60"
                     image={image}
                     alt='material'
                 />
@@ -112,26 +122,27 @@ export default function CardDetails(props) {
                 }}>
                     {amount > 0
                         ?
-                        <Button onClick={() => handleAddPurchase(currentCard)} variant="inhert" startIcon={< AddBoxIcon />}> { isInsideCart ? "Remove": "Add in Shopping List" }</Button>
+                        <Button onClick={() => { handleAddPurchase(currentCard); handleClick() }} variant="inhert" startIcon={isInsideCard ? <DisabledByDefaultIcon /> : < AddBoxIcon />}> {isInsideCard ? "Remove" : "Add in Shopping List"}</Button>
                         :
                         <Button variant="outlined" disabled>Out of stock</Button>}
 
                     <Button onClick={() => navigate("/")} variant="inhert" startIcon={<ArrowBackIosNewIcon />}>
                         Back to list
                     </Button>
-
-
-
                 </CardActions>
-
-
             </Card>
             <Box>
-                <IconButton color="primary" aria-label="add to shopping cart" >
-                    <AddShoppingCartIcon />
-                </IconButton>
-
+                <Snackbar
+                    open={isWindowOpen}
+                    autoHideDuration={6000}
+                    onClose={handleClose}
+                    message={isInsideCard ? "Added Material" : "Remove Material"}
+                    action={action}
+                />
+                <ShoppingListDialog color="inherit"
+                    handleAddPurchase={handleAddPurchase} />
             </Box>
+
         </Box>
 
     );

@@ -6,5 +6,3 @@ export const store = configureStore({
         cards: cardsReducer
     },
 })
-// state все карточки 
-// curent и конрктено вібранная карта 
