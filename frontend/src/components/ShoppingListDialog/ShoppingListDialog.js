@@ -64,7 +64,7 @@ export default function ShoppingListDialog(props) {
                   isButtonShown
                 />)
             })
-            : <DialogContentText><PurchaseForm /></DialogContentText>}
+            : <PurchaseForm />}
         </DialogContent>
         <DialogActions>
           <DialogTitle>{currentStepIndex + 1} / {steps.length}</DialogTitle>
