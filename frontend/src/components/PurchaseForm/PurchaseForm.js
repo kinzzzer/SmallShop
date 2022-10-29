@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Formik, Field, Form } from 'formik';
+import Input from '../ui/InputComponent';
 import Button from '@mui/material/Button';
 
 
@@ -26,9 +27,8 @@ const validate = values => {
 
     return errors;
 };
-const PurchaseForm = () => (
-
-    <div>
+const PurchaseForm = () => {
+    return (
         <Formik
             validate={validate}
             style={{ justifyContent: 'center' }}
@@ -42,51 +42,57 @@ const PurchaseForm = () => (
                 alert(JSON.stringify(values, null, 2));
             }}
         >
-
-            {/* const Input (name, errors, placeholder) */}
-            {({ errors, touched, validateField, validateForm }) => {
-                console.log(errors);
+            {(props) => {
+                console.log(props)
                 return (
-                    <Form style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                    }}>
-                        <div>{errors[name]}</div>
-                        <Field style={{
-                            height: '20px',
-                            border: '2px solid',
-                            borderRadius: 2
+                    <form onSubmit={props.handleSubmit}
+                        style={{
+                            width: '100%'
                         }}
-                            id="firstName"
-                            name="firstName"
-                            placeholder="firstName"
-                        />
-                        <div>{errors[name]}</div>
-                        <Field style={{
-                            height: '20px',
-                            border: '2px solid',
-                            borderRadius: 2
-                        }}
-                            id="lastName"
-                            name="lastName"
-                            placeholder="Last Name"
-                        />
-                        <div>{errors[name]}</div>
-                        <Field style={{
-                            height: '20px',
-                            border: '2px solid',
-                            borderRadius: 2
-                        }}
-                            id="email"
-                            name="email"
-                            placeholder="jane@acme.com"
-                            type="email"
-                        />
-                        <Button type="submit" variant="contained" color="success">Submit</Button>
-                    </Form>
+                    >
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center'
+                        }}>
+                            <Input
+                                id="firstName"
+                                name="firstName"
+                                placeholder="Enter your Name"
+                                label="First Name"
+                            />
+                            <Input
+                                id="lastName"
+                                name="lastName"
+                                placeholder="Enter your Last Name"
+                                label="Last Name"
+                            />
+                            <Input
+                                id="email"
+                                name="email"
+                                placeholder="Enter your email"
+                                label="Email"
+                                error={props.errors}
+                            />
+                            <Button sx={{
+                                ":hover": {
+                                    background: '#4C8C48',
+                                    color: '#000'
+                                },
+                                fontFamily: 'Inter',
+                                background: '#899EA3',
+                                borderRadius: '8px',
+                                margin: '5px',
+                                color: '#D9D9D9',
+                                letterSpacing: '2px'
+                            }} type="submit" >Submit</Button>
+                        </div>
+                    </form>
                 )
             }}
-        </Formik>
-    </div>
-);
+        </Formik >
+    )
+}
+
 export default PurchaseForm;
+
